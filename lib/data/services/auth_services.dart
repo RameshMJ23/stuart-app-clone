@@ -17,7 +17,6 @@ class AuthService{
     try{
       return await _auth.signInWithEmailAndPassword(email: email, password: password);
     }catch(e){
-      log(e.toString());
       return null;
     }
   }
@@ -41,7 +40,6 @@ class AuthService{
         }
       });
     }catch(e){
-      log(e.toString());
       return null;
     }
   }

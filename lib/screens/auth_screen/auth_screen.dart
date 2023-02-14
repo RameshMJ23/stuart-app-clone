@@ -136,20 +136,18 @@ class AuthScreen extends StatelessWidget {
                   //const Spacer(),
                   authOrText,
                   loginGoogleButton(
-                      context: context,
-                      content: "Log in with Google",
-                      onPressed: (dialogContext) async{
-
-                        await AuthService().signInWithGoogle().then((user){
-                          Navigator.pop(dialogContext);
-                          if(user != null){
-                            Navigator.pushNamed(
-                                context, RouteNames.homeScreen
-                            );
-                          }
-                        });
-
-                      }
+                    context: context,
+                    content: "Log in with Google",
+                    onPressed: (dialogContext) async{
+                      await AuthService().signInWithGoogle().then((user){
+                        Navigator.pop(dialogContext);
+                        if(user != null){
+                          Navigator.pushNamed(
+                              context, RouteNames.homeScreen
+                          );
+                        }
+                      });
+                    }
                   ),
                   const SizedBox(height: 8.0,),
                   BuildButton.custom(
