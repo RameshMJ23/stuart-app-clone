@@ -1,0 +1,41 @@
+
+// Splash screen can be added
+
+// compass icon is located just below the account
+// icon hence it can be changed
+
+// In some screens (ex. transaction_screen), the interface is completely
+// empty, show some texts like (no transaction)
+
+// show snackBar when an unavailable station is clicked
+
+// Should we need two screens? One for general view and another for
+// showing details of the screen? This can concisely been shown in a
+// single screen. We can try this!
+// To add to this when filtered, there are not many stations showing on the screen
+// So it is good to add move option when tapped else, UX is not going to be good
+                |
+// When filtered its actually showing all the places instead of showing only
+// filtered ones // Its a bug, its reloading but when its closed adn reopened
+
+// Add accessibility info like
+ - Handicapped parking
+ - wheel chair accessible
+
+ // Available facility:
+ - Grocery
+ - Restroom
+ - Shopping
+ - Dining etc
+ - charging hours
+
+ // When logging, if a new (unsignuped account) is used it directly signs in
+ // without asking the user consent, may be add an user consent before that
+
+ // Asks for gps permission in auth Screen
+
+ // Closes the app (from main Screen) if back button is clicked, add a dialog box to it.
+
+
+// repeated gps request dialog when permission is asked
+

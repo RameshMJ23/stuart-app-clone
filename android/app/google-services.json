@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1087071371762",
+    "project_id": "stuart-clone",
+    "storage_bucket": "stuart-clone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087071371762:android:efb29cf2eaac746134ab6b",
+        "android_client_info": {
+          "package_name": "com.appsaloon.stuartappclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087071371762-grl5v6m00dosr1u9be05h007keuo11ns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appsaloon.stuartappclone",
+            "certificate_hash": "6f8f7435748a409c6105dff06512adbd799644ab"
+          }
+        },
+        {
+          "client_id": "1087071371762-p71j35890gni99nop5irio0316h0femv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd94E3u8qoCqbGTZZEhFIs_MYowpeYV7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087071371762-p71j35890gni99nop5irio0316h0femv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
