@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -25,144 +26,149 @@ class AuthScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return NoInternetScreenBuilder(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: getPeachColor,
-        body: Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 50.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Text(
-                      "Stuart Ev",
-                      style: textTheme.titleLarge,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      "Charge your car effortlessly",
-                      style: textTheme.titleMedium,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Form(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomTextFieldValidator(
-                            textFieldKey: const Key("authEmailField"),
-                            textEditingController: _emailController,
-                            validator: _emailValidator,
-                            label: "Email",
-                            marginVertPad: 0.0,
-                            constantValidation: true,
-                            onChanged: (val){_checkEnablingLogin(); },
-                          ),
-                          const SizedBox(height: 10.0,),
-                          CustomTextFieldValidator(
-                            textFieldKey: const Key("authPasswordField"),
-                            textEditingController: _passwordController,
-                            validator: _passwordValidator,
-                            label: "Password",
-                            marginVertPad: 0.0,
-                            showSuffixWidget: true,
-                            constantValidation: true,
-                            textFieldEnum: ValidatorTextFieldEnum.password,
-                            onChanged: (val){ _checkEnablingLogin(); },
-                          )
-                        ],
+      child: WillPopScope(
+        child:  Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: getPeachColor,
+          body: Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 100.0, 20.0, 50.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Text(
+                        "Stuart Ev",
+                        style: textTheme.titleLarge,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ValueListenableBuilder<bool>(
-                      valueListenable: _enableLoginButton,
-                      builder: (context, enableButton, child){
-                        return BuildButton(
-                          key: const Key("authLoginKey"),
-                          buttonName: "Login",
-                          onPressed: enableButton
-                            ? () {
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        "Charge your car effortlessly",
+                        style: textTheme.titleMedium,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Form(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CustomTextFieldValidator(
+                              textFieldKey: const Key("authEmailField"),
+                              textEditingController: _emailController,
+                              validator: _emailValidator,
+                              label: "Email",
+                              marginVertPad: 0.0,
+                              constantValidation: true,
+                              onChanged: (val){_checkEnablingLogin(); },
+                            ),
+                            const SizedBox(height: 10.0,),
+                            CustomTextFieldValidator(
+                              textFieldKey: const Key("authPasswordField"),
+                              textEditingController: _passwordController,
+                              validator: _passwordValidator,
+                              label: "Password",
+                              marginVertPad: 0.0,
+                              showSuffixWidget: true,
+                              constantValidation: true,
+                              textFieldEnum: ValidatorTextFieldEnum.password,
+                              onChanged: (val){ _checkEnablingLogin(); },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable: _enableLoginButton,
+                        builder: (context, enableButton, child){
+                          return BuildButton(
+                            key: const Key("authLoginKey"),
+                            buttonName: "Login",
+                            onPressed: enableButton
+                                ? () {
                               showLoadingDialog(
-                                context: context,
-                                dialogFunc: (dialogContext) async{
-                                  await AuthService().signInWithEmailAndPassWord(
-                                    email: _emailController.text,
-                                    password: _passwordController.text
-                                  ).then((user){
-                                    if(user != null){
-                                      Navigator.pop(dialogContext);
-                                      Navigator.pushReplacementNamed(
-                                        context, RouteNames.authWrapperScreen
-                                      );
-                                    }else{
-                                      Navigator.pop(dialogContext);
-                                      showErrorDialog(
-                                        context: context,
-                                        title: "Authentication error",
-                                        content: "Incorrect email, password, or both"
-                                      );
-                                    }
-                                  });
-                                }
+                                  context: context,
+                                  dialogFunc: (dialogContext) async{
+                                    await AuthService().signInWithEmailAndPassWord(
+                                        email: _emailController.text,
+                                        password: _passwordController.text
+                                    ).then((user){
+                                      if(user != null){
+                                        Navigator.pop(dialogContext);
+                                        Navigator.pushReplacementNamed(
+                                            context, RouteNames.authWrapperScreen
+                                        );
+                                      }else{
+                                        Navigator.pop(dialogContext);
+                                        showErrorDialog(
+                                            context: context,
+                                            title: "Authentication error",
+                                            content: "Incorrect email, password, or both"
+                                        );
+                                      }
+                                    });
+                                  }
                               );
                             } : null,
-                          disableColor: getVioletColor.withOpacity(0.3),
-                          marginVertPad: 8.0,
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: BuildButton.transparent(
-                      key: const Key("authForgotPassKey"),
-                      buttonName: "Forgot Password?",
-                      onPressed: () async{
-                        await launchUrl(Uri.parse(
-                          "https://web.stuart.energy/forgot-password"
-                        ));
-                      },
-                      marginVertPad: 5.0
-                    ),
-                  ),
-                  //const Spacer(),
-                  authOrText,
-                  loginGoogleButton(
-                    context: context,
-                    content: "Log in with Google",
-                    onPressed: (dialogContext) async{
-                      await AuthService().signInWithGoogle().then((user){
-                        Navigator.pop(dialogContext);
-                        if(user != null){
-                          Navigator.pushNamed(
-                              context, RouteNames.homeScreen
+                            disableColor: getVioletColor.withOpacity(0.3),
+                            marginVertPad: 8.0,
                           );
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: BuildButton.transparent(
+                          key: const Key("authForgotPassKey"),
+                          buttonName: "Forgot Password?",
+                          onPressed: () async{
+                            await launchUrl(Uri.parse(
+                                "https://web.stuart.energy/forgot-password"
+                            ));
+                          },
+                          marginVertPad: 5.0
+                      ),
+                    ),
+                    //const Spacer(),
+                    authOrText,
+                    loginGoogleButton(
+                        context: context,
+                        content: "Log in with Google",
+                        onPressed: (dialogContext) async{
+                          await AuthService().signInWithGoogle().then((user){
+                            Navigator.pop(dialogContext);
+                            if(user != null){
+                              Navigator.pushReplacementNamed(
+                                context, RouteNames.homeScreen
+                              );
+                            }
+                          });
                         }
-                      });
-                    }
-                  ),
-                  const SizedBox(height: 8.0,),
-                  BuildButton.custom(
-                    customButtonIcon: Icons.arrow_forward_ios,
-                    customButtonText: "Don't have an account",
-                    onPressed: (){
-                      Navigator.pushNamed(context, RouteNames.signUpScreen);
-                    },
-                    splashColor: getVioletColor.withOpacity(0.4),
-                    iconSize: 15.0,
-                  )
-                ],
-              ),
-            )
+                    ),
+                    const SizedBox(height: 8.0,),
+                    BuildButton.custom(
+                      customButtonIcon: Icons.arrow_forward_ios,
+                      customButtonText: "Don't have an account",
+                      onPressed: (){
+                        Navigator.pushNamed(context, RouteNames.signUpScreen);
+                      },
+                      splashColor: getVioletColor.withOpacity(0.4),
+                      iconSize: 15.0,
+                    )
+                  ],
+                ),
+              )
+          ),
         ),
+        onWillPop: () async{
+          return closeAppFunc(context);
+        },
       )
     );
   }

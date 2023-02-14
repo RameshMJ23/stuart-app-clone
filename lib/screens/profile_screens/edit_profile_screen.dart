@@ -84,9 +84,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       buildTextButton(buttonName: "Logout", onTap: () async{
                         await AuthService().signOut().then((value){
                           Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              RouteNames.authScreen,
-                                  (route) => route.isFirst
+                            context,
+                            RouteNames.authScreen,
+                              (route) => route.settings.name == RouteNames.authScreen
                           );
                         });
                       }),

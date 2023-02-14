@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -479,4 +481,100 @@ showErrorDialog({
       );
     }
   );
+}
+
+showCloseDialog({
+  required BuildContext context,
+  required Function onPressed
+}){
+
+  showDialog(
+    context: context,
+    builder: (dialogContext){
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        backgroundColor: getPeachColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 12.0, horizontal: 15.0
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0
+                ),
+                child: Text(
+                  "Exit",
+                  style: StuartTextStyles.w50022,
+                ),
+              ),
+              Text(
+                "Do you want to exit the app?",
+                style: StuartTextStyles.w40014,
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10.0
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0
+                      ),
+                      child: SizedBox(
+                        width: 120,
+                        child: BuildButton.transparent(
+                          showBorder: true,
+                          borderColor: getVioletColor,
+                          buttonName: "Yes",
+                          onPressed: (){
+                            Navigator.pop(dialogContext);
+                            onPressed();
+                          }
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5.0
+                        ),
+                        child: BuildButton(
+                          buttonName: "cancel",
+                          onPressed: (){
+                            Navigator.pop(dialogContext);
+                          }
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  );
+}
+
+Future<bool> closeAppFunc(BuildContext context) async{
+
+  Completer<bool> doExit = Completer<bool>();
+
+  showCloseDialog(
+    context: context,
+    onPressed: (){
+      doExit.complete(true);
+    }
+  );
+
+  return await doExit.future;
 }

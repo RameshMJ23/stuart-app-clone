@@ -41,6 +41,9 @@ class AppRouter{
     switch(routeSettings.name){
       case RouteNames.authScreen:
         return MaterialPageRoute(
+          settings: const RouteSettings(
+            name: RouteNames.authScreen
+          ),
           builder: (_) => AuthScreen()
         );
       case RouteNames.signUpScreen:

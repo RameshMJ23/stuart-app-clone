@@ -1,5 +1,6 @@
 
 
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -55,125 +56,140 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return NoInternetScreenBuilder(
       child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Stack(
-            children: [
-              ValueListenableBuilder(
-                valueListenable: permissionNotifier,
-                builder: (context, bool val, child){
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.505,
-                    child: Stack(
-                      children: [
-                        BlocBuilder<LocationBloc, LocationState>(
-                          builder: (context, locationState){
-                            return GoogleMap(
-                              key: const Key("Map"),
-                              myLocationButtonEnabled: false,
-                              myLocationEnabled: val,
-                              compassEnabled: true,
-                              zoomGesturesEnabled: true,
-                              zoomControlsEnabled: false,
-                              rotateGesturesEnabled: true,
-                              tiltGesturesEnabled: false,
-                              mapToolbarEnabled: true,
-                              initialCameraPosition: const CameraPosition(
-                                  target: LatLng(55.1694, 23.8813),
-                                  zoom: 7.0
-                              ),
-                              onMapCreated: (controller){
-                                mapController = controller;
-                              },
-                              markers: (locationState is FetchedLocationState)
-                                  ? locationState.locations.map((location){
-                                return Marker(
-                                    markerId: MarkerId(location.location.latitude.toString()),
-                                    icon: getEvIcon(location, locationState.iconList),
-                                    position: LatLng(
-                                        location.location.latitude,
-                                        location.location.longitude
-                                    )
-                                );
-                              }).toList().toSet(): {},
-                            );
-                          },
-                        ),
-                        Positioned(
-                          right: 10.0,
-                          bottom: 15.0,
-                          child: BuildIconButton(
-                            icon: Icons.gps_fixed,
-                            onPressed: (){
-
+        child: WillPopScope(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                ValueListenableBuilder(
+                  valueListenable: permissionNotifier,
+                  builder: (context, bool val, child){
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.505,
+                      child: Stack(
+                        children: [
+                          BlocBuilder<LocationBloc, LocationState>(
+                            builder: (context, locationState){
+                              return GoogleMap(
+                                key: const Key("Map"),
+                                myLocationButtonEnabled: false,
+                                myLocationEnabled: val,
+                                compassEnabled: true,
+                                zoomGesturesEnabled: true,
+                                zoomControlsEnabled: false,
+                                rotateGesturesEnabled: true,
+                                tiltGesturesEnabled: false,
+                                mapToolbarEnabled: true,
+                                initialCameraPosition: const CameraPosition(
+                                    target: LatLng(55.1694, 23.8813),
+                                    zoom: 7.0
+                                ),
+                                onMapCreated: (controller){
+                                  mapController = controller;
+                                },
+                                markers: (locationState is FetchedLocationState)
+                                    ? locationState.locations.map((location){
+                                  return Marker(
+                                      markerId: MarkerId(location.location.latitude.toString()),
+                                      icon: getEvIcon(location, locationState.iconList),
+                                      position: LatLng(
+                                          location.location.latitude,
+                                          location.location.longitude
+                                      )
+                                  );
+                                }).toList().toSet(): {},
+                              );
                             },
-                            buttonColor: Colors.white,
-                            iconColor: Colors.black87,
                           ),
-                        ),
-                        BlocBuilder<UserInfoBloc, UserInfoState>(
-                          builder: (context, userInfoState){
+                          Positioned(
+                            right: 10.0,
+                            bottom: 15.0,
+                            child: BuildIconButton(
+                              icon: Icons.gps_fixed,
+                              onPressed: (){
 
-                            final userImage = (
-                              userInfoState is FetchedUserInfoState
-                                && userInfoState.userModel.photoUrl != null
-                            )
-                            ? BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  userInfoState.userModel.photoUrl!
-                                )
-                              ),
-                              shape: BoxShape.circle
-                            )
-                            : const BoxDecoration(
-                              image: DecorationImage(
-                                image:  AssetImage(
-                                  "assets/person_icon.jpg"
-                                )
-                              ),
-                              shape: BoxShape.circle
-                            );
+                              },
+                              buttonColor: Colors.white,
+                              iconColor: Colors.black87,
+                            ),
+                          ),
+                          BlocBuilder<UserInfoBloc, UserInfoState>(
+                            builder: (context, userInfoState){
 
-                            return Positioned(
-                                right: 15.0,
-                                top: 25.0,
-                                child: GestureDetector(
-                                  child: Container(
-                                      height: 40.0,
-                                      width: 40.0,
-                                      decoration: userImage
+                              final userImage = (
+                                  userInfoState is FetchedUserInfoState
+                                      && userInfoState.userModel.photoUrl != null
+                              )
+                                  ? BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          userInfoState.userModel.photoUrl!
+                                      )
                                   ),
-                                  onTap: (){
-                                    Navigator.pushNamed(
-                                        context, RouteNames.profileScreen
-                                    );
-                                  },
-                                )
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-              MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                      value: BlocProvider.of<LocationBloc>(context),
-                    ),
-                    BlocProvider.value(
-                      value: BlocProvider.of<FilterBloc>(context),
-                    ),
-                    BlocProvider.value(
-                      value: BlocProvider.of<FavLocationBloc>(context),
-                    )
-                  ],
-                  child: ScrollChargerSheetWidget()
-              )
-            ],
+                                  shape: BoxShape.circle
+                              )
+                                  : const BoxDecoration(
+                                  image: DecorationImage(
+                                      image:  AssetImage(
+                                          "assets/person_icon.jpg"
+                                      )
+                                  ),
+                                  shape: BoxShape.circle
+                              );
+
+                              return Positioned(
+                                  right: 15.0,
+                                  top: 25.0,
+                                  child: GestureDetector(
+                                    child: Container(
+                                        height: 40.0,
+                                        width: 40.0,
+                                        decoration: userImage
+                                    ),
+                                    onTap: (){
+                                      Navigator.pushNamed(
+                                          context, RouteNames.profileScreen
+                                      );
+                                    },
+                                  )
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: BlocProvider.of<LocationBloc>(context),
+                      ),
+                      BlocProvider.value(
+                        value: BlocProvider.of<FilterBloc>(context),
+                      ),
+                      BlocProvider.value(
+                        value: BlocProvider.of<FavLocationBloc>(context),
+                      )
+                    ],
+                    child: ScrollChargerSheetWidget()
+                )
+              ],
+            ),
           ),
+          onWillPop: () async{
+
+            Completer<bool> doExit = Completer<bool>();
+
+            showCloseDialog(
+              context: context,
+              onPressed: (){
+                doExit.complete(true);
+              }
+            );
+
+            return await doExit.future;
+          },
         ),
       ),
     );

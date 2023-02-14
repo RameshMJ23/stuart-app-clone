@@ -32,7 +32,7 @@ class CardDetailScreen extends StatelessWidget {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(
-              horizontal: 20.0
+            horizontal: 20.0
           ),
           child: Column(
             children: [
